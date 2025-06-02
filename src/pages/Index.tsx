@@ -1,13 +1,59 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Layout from '../components/Layout';
+import Home from '../components/Home';
+import Register from '../components/Register';
+import Login from '../components/Login';
+import Profile from '../components/Profile';
+import { AuctionProvider } from '../context/AuctionContext';
+import { AuthProvider } from '../context/AuthContext';
+import { checkCookiesEnabled, checkJavaScriptEnabled } from '../utils/browserCheck';
+import '../styles/global.css';
+
+const queryClient = new QueryClient();
 
 const Index = () => {
+  const [cookiesEnabled, setCookiesEnabled] = useState(true);
+  const [jsEnabled, setJsEnabled] = useState(true);
+
+  useEffect(() => {
+    setCookiesEnabled(checkCookiesEnabled());
+    setJsEnabled(checkJavaScriptEnabled());
+  }, []);
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <AuctionProvider>
+          <Router>
+            <div className="min-h-screen bg-gray-50">
+              {!cookiesEnabled && (
+                <div className="bg-red-600 text-white text-center py-2 px-4">
+                  Per favore abilita i cookie: il sito potrebbe non funzionare correttamente.
+                </div>
+              )}
+              {!jsEnabled && (
+                <div className="bg-red-600 text-white text-center py-2 px-4">
+                  Per favore abilita JavaScript per utilizzare tutte le funzionalità del sito.
+                </div>
+              )}
+              
+              <Layout>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+              </Layout>
+            </div>
+          </Router>
+        </AuctionProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 };
 

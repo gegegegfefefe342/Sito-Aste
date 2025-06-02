@@ -1,73 +1,96 @@
-# Welcome to your Lovable project
 
-## Project info
+# Sistema Asta Online
 
-**URL**: https://lovable.dev/projects/0bd940d7-b78d-4736-94f8-c09dbe48fbad
+Un'applicazione web completa per la gestione di un'asta online con sistema di offerte automatiche (THR - Threshold).
 
-## How can I edit this code?
+## Funzionalità Principali
 
-There are several ways of editing your application.
+- **Registrazione e Autenticazione**: Sistema sicuro con validazione email e password
+- **Gestione Sessioni**: Timeout automatico dopo 2 minuti di inattività
+- **Sistema THR**: Gli utenti impostano un'offerta massima, il sistema calcola automaticamente l'offerta vincente
+- **Aggiornamenti Real-time**: Il BID viene aggiornato ogni 5 secondi
+- **Interface Responsive**: Ottimizzata per desktop e dispositivi mobili
+- **Validazione Completa**: Controlli lato client e server per tutti i form
 
-**Use Lovable**
+## Come Funziona l'Asta
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/0bd940d7-b78d-4736-94f8-c09dbe48fbad) and start prompting.
+1. **THR (Threshold)**: Ogni utente imposta la sua offerta massima segreta
+2. **Calcolo BID**: Il sistema determina l'offerta vincente come secondo THR più alto + 0,01€
+3. **Offerente Vincente**: Chi ha il THR più alto vince con il BID calcolato
+4. **Parità**: In caso di THR uguali, vince chi ha offerto per primo
 
-Changes made via Lovable will be committed automatically to this repo.
+## Struttura del Progetto
 
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+src/
+├── components/          # Componenti React
+│   ├── Layout.tsx      # Layout principale
+│   ├── Header.tsx      # Intestazione
+│   ├── Sidebar.tsx     # Barra di navigazione
+│   ├── Home.tsx        # Pagina home pubblica
+│   ├── Register.tsx    # Registrazione utenti
+│   ├── Login.tsx       # Login utenti
+│   └── Profile.tsx     # Profilo e gestione THR
+├── context/            # Context per gestione stato
+│   ├── AuthContext.tsx # Autenticazione e sessioni
+│   └── AuctionContext.tsx # Logica asta e THR
+├── utils/              # Utility functions
+│   └── browserCheck.ts # Controllo cookie e JS
+├── styles/             # Stili CSS
+│   └── global.css      # Stili globali
+└── pages/
+    └── Index.tsx       # Pagina principale
 ```
 
-**Edit a file directly in GitHub**
+## Tecnologie Utilizzate
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- **React 18** con TypeScript
+- **React Router** per la navigazione
+- **Tailwind CSS** per lo styling
+- **Lucide React** per le icone
+- **Local Storage** per la persistenza dati
+- **Context API** per la gestione dello stato
 
-**Use GitHub Codespaces**
+## Caratteristiche Tecniche
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Sicurezza
+- Hash delle password (simulato con btoa)
+- Validazione input lato client e server
+- Gestione sicura delle sessioni
+- Controllo timeout inattività
 
-## What technologies are used for this project?
+### UX/UI
+- Design moderno e responsive
+- Feedback visivo per tutte le azioni
+- Tooltip informativi
+- Messaggi di errore/successo colorati
+- Aggiornamenti real-time
 
-This project is built with:
+### Validazioni
+- **Email**: Formato valido con regex
+- **Password**: Almeno una lettera e un numero
+- **THR**: Multipli di 0,01€, maggiore del BID attuale
+- **Sessioni**: Controllo automatico timeout
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Come Utilizzare
 
-## How can I deploy this project?
+1. **Visitare la Home**: Vedere BID attuale e offerente
+2. **Registrarsi**: Creare account con email e password valide
+3. **Accedere**: Login con credenziali
+4. **Impostare THR**: Nel profilo, inserire offerta massima
+5. **Monitorare**: Controllare stato asta in tempo reale
 
-Simply open [Lovable](https://lovable.dev/projects/0bd940d7-b78d-4736-94f8-c09dbe48fbad) and click on Share -> Publish.
+## Requisiti Browser
 
-## Can I connect a custom domain to my Lovable project?
+- **Cookie abilitati**: Necessari per il funzionamento delle sessioni
+- **JavaScript abilitato**: Richiesto per tutte le funzionalità
+- **Browser moderni**: Supporto ES6+ e API moderne
 
-Yes, you can!
+## Stati dell'Asta
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- **BID**: Offerta attuale visibile pubblicamente
+- **Bidder**: Email dell'offerente attuale
+- **THR**: Offerte massime segrete degli utenti
+- **Sessioni**: Gestione automatica con timeout
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+L'applicazione è stata sviluppata seguendo le migliori pratiche di sviluppo web moderno, con particolare attenzione all'usabilità, sicurezza e performance.
